@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vergleichen Sie immer 2 Sachen</title>
+<style>
+:root{--bg:#fbfcf7;--surf:#fff;--ink:#1d2a14;--mute:#5b6a50;--g:#7fb312;--gd:#3f6b0a;--gl:#eaf3d2;--ok:#2e8b2e;--bad:#c4402f;--badl:#f9e1dc;--okl:#dff1d8;--sun:#f0a800;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a0e;--surf:#1f2816;--ink:#eef3e4;--mute:#a4b394;--g:#94c11f;--gd:#b6dd5a;--gl:#2b3a18;--okl:#1f3a1b;--badl:#44221d;--ok:#6fd16f;--bad:#ff8a78}}
+:root[data-theme="dark"]{--bg:#141a0e;--surf:#1f2816;--ink:#eef3e4;--mute:#a4b394;--g:#94c11f;--gd:#b6dd5a;--gl:#2b3a18;--okl:#1f3a1b;--badl:#44221d;--ok:#6fd16f;--bad:#ff8a78}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.45 "Nunito","Segoe UI",Helvetica,Arial,sans-serif;min-height:100%}
+main{max-width:760px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:clamp(26px,5vw,38px);line-height:1.1;margin:0 0 4px;color:var(--gd);font-weight:900}
+.dots{border-bottom:5px dotted var(--g);margin:10px 0 18px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+button{font:inherit;color:inherit;cursor:pointer}
+.tab{flex:1;padding:10px;border:2px solid var(--g);background:var(--surf);border-radius:10px;font-weight:800}
+.tab[aria-selected="true"]{background:var(--g);color:#142003}
+button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:800;color:var(--mute)}
+.track{height:10px;background:var(--gl);border-radius:6px;overflow:hidden;margin-bottom:18px}
+.fill{height:100%;background:var(--g);width:0;transition:width .3s}
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.card{background:var(--surf);border:3px solid var(--g);border-radius:14px;padding:14px 8px;text-align:center}
+.card.a{border-color:var(--gd);background:var(--gl)}
+.emo{font-size:clamp(48px,14vw,84px);line-height:1.1}
+.nm{font-weight:800;margin-top:4px}
+.vs{font-weight:900;color:var(--mute);font-size:20px}
+.sent{font-size:clamp(20px,4.6vw,28px);font-weight:800;text-align:center;margin:22px 0 16px}
+.gap{display:inline-block;min-width:3.2em;border-bottom:4px solid var(--g);color:var(--gd)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{padding:14px 8px;border-radius:12px;border:3px solid var(--g);background:var(--surf);font-weight:800;font-size:22px}
+.opt:hover:not(:disabled){background:var(--gl)}
+.opt.ok{background:var(--okl);border-color:var(--ok)}
+.opt.no{background:var(--badl);border-color:var(--bad);animation:sh .3s}
+.opt:disabled{cursor:default}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.fb{min-height:64px;margin:16px 0 8px;text-align:center}
+.fb b{font-size:20px}
+.fb small{display:block;color:var(--mute);font-size:15px}
+.cta{display:block;margin:6px auto 0;padding:12px 28px;border:0;border-radius:12px;background:var(--g);color:#142003;font-weight:900;font-size:19px}
+.hide{display:none!important}
+.center{text-align:center}
+.big{font-size:56px;font-weight:900;color:var(--gd)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}
+.chip{padding:8px 12px;border-radius:10px;border:2px solid var(--g);background:var(--surf);font-weight:700}
+.chip[aria-pressed="true"]{background:var(--g);color:#142003}
+.chip.em{font-size:28px;padding:4px 10px}
+h2{font-size:18px;margin:14px 0 0;color:var(--mute)}
+.out{background:var(--gl);border-radius:12px;padding:16px;text-align:center;font-size:clamp(20px,4.6vw,26px);font-weight:800;min-height:70px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:16px;margin-top:8px}
+td,th{padding:6px 10px;border-bottom:1px solid var(--gl);text-align:left}
+th{color:var(--mute)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<h1>Vergleichen Sie immer 2 Sachen.</h1>
+<div class="dots"></div>
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" id="t1" aria-selected="true">Quiz</button>
+<button class="tab" role="tab" id="t2" aria-selected="false">Frei üben</button>
+</div>
+
+<section id="quiz">
+<div id="start" class="center">
+<p>Zwei Gegenstände, ein Satz mit Lücke. Wähle den Komparativ, der passt.</p>
+<button class="cta" id="go">Spiel starten</button>
+</div>
+<div id="play" class="hide">
+<div class="bar"><span id="rnd"></span><span id="sc"></span></div>
+<div class="track"><div class="fill" id="fill"></div></div>
+<div class="duel">
+<div class="card a"><div class="emo" id="ea"></div><div class="nm" id="na"></div></div>
+<div class="vs">VS</div>
+<div class="card"><div class="emo" id="eb"></div><div class="nm" id="nb"></div></div>
+</div>
+<div class="sent" id="sent" aria-live="polite"></div>
+<div class="opts" id="opts"></div>
+<div class="fb" id="fb" aria-live="polite"></div>
+<button class="cta hide" id="next">Weiter</button>
+</div>
+<div id="end" class="hide center">
+<div class="big" id="final"></div>
+<p id="msg"></p>
+<button class="cta" id="again">Noch einmal spielen</button>
+</div>
+</section>
+
+<section id="free" class="hide">
+<h2>1. Gegenstand</h2><div class="chips" id="fa"></div>
+<h2>2. Gegenstand</h2><div class="chips" id="fb2"></div>
+<h2>Adjektiv</h2><div class="chips" id="fadj"></div>
+<div class="out" id="fout">Wähle zwei Gegenstände und ein Adjektiv.</div>
+<h2>Komparative im Überblick</h2>
+<div class="tw"><table id="tbl"></table></div>
+</section>
+</main>
+<script>
+var I={smartphone:["das","Smartphone","📱"],laptop:["der","Laptop","💻"],tablet:["das","Tablet","📲"],computer:["der","Computer","🖥️"],smartwatch:["die","Smartwatch","⌚"],telefon:["das","Wähltelefon","☎️"],zeitung:["die","Zeitung","📰"],buch:["das","Buch","📖"],controller:["der","Controller","🎮"],armbanduhr:["die","Armbanduhr","🕰️"],vr:["die","VR-Brille","🥽"],fernseher:["der","Fernseher","📺"],kamera:["die","Kamera","📷"]};
+var C={schnell:"schneller",langsam:"langsamer",billig:"billiger",teuer:"teurer","groß":"größer",klein:"kleiner",leicht:"leichter",schwer:"schwerer",modern:"moderner",alt:"älter",wichtig:"wichtiger",gut:"besser"};
+var H={"groß":"groß → größer (Umlaut)",alt:"alt → älter (Umlaut)",gut:"gut → besser (unregelmäßig)",teuer:"teuer → teurer (das e fällt weg)"};
+var D=[
+{hi:"schnell",lo:"langsam",s:{smartphone:9,laptop:8,tablet:6,computer:4,telefon:1}},
+{hi:"teuer",lo:"billig",s:{zeitung:1,buch:2,controller:3,armbanduhr:4,smartwatch:5,vr:6,tablet:6,smartphone:7,laptop:8}},
+{hi:"groß",lo:"klein",s:{fernseher:9,computer:8,laptop:6,tablet:4,smartphone:3,smartwatch:1}},
+{hi:"schwer",lo:"leicht",s:{computer:9,fernseher:8,laptop:6,kamera:5,buch:4,tablet:3,smartphone:2,smartwatch:1}},
+{hi:"modern",lo:"alt",s:{smartphone:9,smartwatch:9,vr:9,tablet:8,laptop:7,computer:4,telefon:1}},
+{hi:"wichtig",lo:null,s:{smartphone:8,buch:7,computer:6,zeitung:5,kamera:4,controller:2,vr:2}}
+];
+var N=10,q=[],i=0,score=0,streak=0,done=false;
+function $(x){return document.getElementById(x)}
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function shuf(a){return a.map(function(v){return[Math.random(),v]}).sort(function(x,y){return x[0]-y[0]}).map(function(p){return p[1]})}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function nm(k){return I[k][0]+" "+I[k][1]}
+function make(){
+ var d=rnd(D),ks=Object.keys(d.s),a,b,t=0;
+ do{a=rnd(ks);b=rnd(ks);t++}while((a===b||Math.abs(d.s[a]-d.s[b])<2)&&t<200);
+ var adj=(d.lo&&Math.random()<.5)?d.lo:d.hi;
+ var hiFirst=d.s[a]>d.s[b];
+ if(adj===d.hi&&!hiFirst||adj===d.lo&&hiFirst){var x=a;a=b;b=x}
+ var all=Object.keys(C).filter(function(k){return k!==adj});
+ var anti=adj===d.hi?d.lo:(adj===d.lo?d.hi:null);
+ var dis=[];if(anti)dis.push(anti);
+ shuf(all.filter(function(k){return k!==anti})).slice(0,3-dis.length).forEach(function(k){dis.push(k)});
+ return{a:a,b:b,adj:adj,opts:shuf([adj].concat(dis))};
+}
+function build(){q=[];var last="";while(q.length<N){var m=make(),sig=m.a+m.b;if(sig!==last){q.push(m);last=sig}}}
+function show(){
+ done=false;var m=q[i];
+ $("rnd").textContent="Runde "+(i+1)+" von "+N;
+ $("sc").textContent="Punkte: "+score+(streak>1?"  🔥"+streak:"");
+ $("fill").style.width=(i/N*100)+"%";
+ $("ea").textContent=I[m.a][2];$("na").textContent=nm(m.a);
+ $("eb").textContent=I[m.b][2];$("nb").textContent=nm(m.b);
+ $("sent").innerHTML=cap(nm(m.a))+" ist <span class='gap'>&nbsp;</span> als "+nm(m.b)+".";
+ $("fb").innerHTML="";$("next").classList.add("hide");
+ var o=$("opts");o.innerHTML="";
+ m.opts.forEach(function(k){
+  var b=document.createElement("button");b.className="opt";b.textContent=C[k];b.dataset.k=k;
+  b.onclick=function(){pick(k,b)};o.appendChild(b);
+ });
+}
+function pick(k,btn){
+ if(done)return;var m=q[i];
+ var full=cap(nm(m.a))+" ist "+C[m.adj]+" als "+nm(m.b)+".";
+ if(k===m.adj){
+  done=true;score+=10+(streak>=2?5:0);streak++;btn.classList.add("ok");
+  $("fb").innerHTML="<b style='color:var(--ok)'>Richtig!</b><small>"+full+"<br>"+(H[m.adj]||m.adj+" → "+C[m.adj])+"</small>";
+  fin();
+ }else{
+  btn.classList.add("no");btn.disabled=true;streak=0;score=Math.max(0,score-2);
+  $("sc").textContent="Punkte: "+score;
+  $("fb").innerHTML="<b style='color:var(--bad)'>Nicht ganz.</b><small>Schau auf die beiden Gegenstände und versuche es noch einmal.</small>";
+ }
+}
+function fin(){
+ var m=q[i];
+ document.querySelectorAll(".opt").forEach(function(b){b.disabled=true;if(b.dataset.k===m.adj)b.classList.add("ok")});
+ $("sc").textContent="Punkte: "+score+(streak>1?"  🔥"+streak:"");
+ var n=$("next");n.textContent=i===N-1?"Ergebnis ansehen":"Weiter";n.classList.remove("hide");n.focus();
+}
+function end(){
+ $("play").classList.add("hide");$("end").classList.remove("hide");
+ $("fill").style.width="100%";
+ $("final").textContent=score+" Punkte";
+ $("msg").textContent=score>=120?"Sehr gut! Du vergleichst wie ein Profi.":score>=70?"Gut gemacht! Noch eine Runde für mehr Sicherheit?":"Übung macht den Meister. Schau dir die Tabelle bei „Frei üben“ an.";
+}
+$("go").onclick=$("again").onclick=function(){
+ build();i=0;score=0;streak=0;
+ $("start").classList.add("hide");$("end").classList.add("hide");$("play").classList.remove("hide");show();
+};
+$("next").onclick=function(){if(i<N-1){i++;show()}else end()};
+
+/* Frei üben */
+var fs={a:null,b:null,adj:null};
+function chips(id,items,key,em){
+ var c=$(id);c.innerHTML="";
+ items.forEach(function(k){
+  var b=document.createElement("button");b.className="chip"+(em?" em":"");b.setAttribute("aria-pressed","false");
+  b.textContent=em?I[k][2]:k;if(em)b.title=nm(k);b.setAttribute("aria-label",em?nm(k):k);
+  b.onclick=function(){fs[key]=k;Array.prototype.forEach.call(c.children,function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");upd()};
+  c.appendChild(b);
+ });
+}
+function upd(){
+ var o=$("fout");
+ if(!fs.a||!fs.b||!fs.adj){o.textContent="Wähle zwei Gegenstände und ein Adjektiv.";return}
+ if(fs.a===fs.b){o.textContent="Bitte wähle zwei verschiedene Gegenstände.";return}
+ o.innerHTML=I[fs.a][2]+" "+cap(nm(fs.a))+" ist "+C[fs.adj]+" als "+nm(fs.b)+" "+I[fs.b][2]+"."+"<br><small style='font-weight:600;color:var(--mute);font-size:15px'>"+(H[fs.adj]||fs.adj+" → "+C[fs.adj])+"</small>";
+}
+var ik=Object.keys(I),ak=["langsam","schnell","billig","teuer","groß","klein","leicht","schwer","modern","alt","wichtig","gut"];
+chips("fa",ik,"a",true);chips("fb2",ik,"b",true);chips("fadj",ak,"adj",false);
+var th="<tr><th>Adjektiv</th><th>Komparativ</th></tr>";
+ak.forEach(function(k){th+="<tr><td>"+k+"</td><td>"+C[k]+"</td></tr>"});
+$("tbl").innerHTML=th;
+
+function tab(n){
+ $("quiz").classList.toggle("hide",n!==1);$("free").classList.toggle("hide",n!==2);
+ $("t1").setAttribute("aria-selected",n===1);$("t2").setAttribute("aria-selected",n===2);
+}
+$("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};
+</script>
+</body>
+</html>
